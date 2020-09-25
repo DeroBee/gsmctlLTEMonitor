@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace gsmctlLTEMonitor
 {
-	class DataHandling
+	class program
 	{
-
 	}
 }

@@ -16,5 +16,10 @@ namespace gsmctlLTEMonitor
 		{
 			InitializeComponent();
 		}
-	}
+
+        private void buttonConnect_Click(object sender, EventArgs e)
+        {
+			DataHandling.Connect(this.textBoxIPPort.Text, this.textBoxUser.Text, this.textBoxPassword.Text);
+        }
+    }
 }

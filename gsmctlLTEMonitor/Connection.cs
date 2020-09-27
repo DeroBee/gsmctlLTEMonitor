@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms.VisualStyles;
 
 namespace gsmctlLTEMonitor
 {
@@ -16,6 +17,14 @@ namespace gsmctlLTEMonitor
 
 		private ConnectionInfo connectionInfo;
 		private SshClient client;
+		private ShellStream stream;
+
+		public Connection(string ip, string username, string password)
+        {
+			this.ip = ip;
+			this.username = username;
+			this.password = password;
+        }
 
 		/// <summary>
 		/// Open a connection to the SSH router.
@@ -27,7 +36,6 @@ namespace gsmctlLTEMonitor
 		/// </returns>
 		public bool Connect()
 		{
-			throw new NotImplementedException();
 			// get connection info
 
 			// build connectionInfo
@@ -36,11 +44,24 @@ namespace gsmctlLTEMonitor
 
 			// establish connection
 			this.client = new SshClient(this.connectionInfo);
+            this.client.Connect();
+
+			// create ShellStream
+			this.stream = this.client.CreateShellStream("", 80, 0, 0, 0, 1000);
+			return true;
 		}
 
 		public void Dispose()
 		{
-			throw new NotImplementedException();
+            if (this.client.IsConnected)
+            {
+				this.client.Dispose();
+				return;
+            }
+            else
+            {
+				return;
+            }
 		}
 
 
@@ -61,7 +82,10 @@ namespace gsmctlLTEMonitor
 		/// <returns>Router output </returns>
 		public string RunCommand(string command) 
 		{
-			throw new NotImplementedException();
+			SshCommand com = this.client.CreateCommand(command);
+			com.Execute();
+
+			return com.Result; 
 		}
 	}
 }
